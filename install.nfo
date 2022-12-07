@@ -4,6 +4,9 @@ image: raspian lite
 20221207:>>>
 https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2022-09-26/2022-09-22-raspios-bullseye-armhf-lite.img.xz
 
+Das beste ist man schreibt das obige Image mit dem offiziellen Raspberry Pi Image writer.
+Bei dem kann man vorher schon Wifi, SSH, user name etc. einstellen.
+
 sudo apt-get install cmake
 sudo apt-get install libasound2-dev
 sudo apt-get install libudev-dev
