@@ -82,4 +82,10 @@ ip route add 44.225.64.12 via ${SRV_IP}
 ip route add 44.143.100.1 via ${SRV_IP}
 <<<<<<<<<<<<<<
 
+weechat
+sudo apt-get install weechat
+
+pat
+"muss ich nochmal heraussuchen"
+
 GOOD LUCK!
