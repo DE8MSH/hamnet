@@ -1,0 +1,85 @@
+Geschreibsel (CR) by DO7OO -- without warranty! STand 20221207
+image: raspian lite
+
+20221207:>>>
+https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2022-09-26/2022-09-22-raspios-bullseye-armhf-lite.img.xz
+
+sudo apt-get install cmake
+sudo apt-get install libasound2-dev
+sudo apt-get install libudev-dev
+sudo apt-get install git
+git clone https://www.github.com/wb2osz/direwolf
+cd direwolf/
+mkdir build && cd build
+cmake -DUNITTEST=1 ..
+make -j4
+make test
+sudo make install
+sudo ldconfig
+
+nano direwolf.conf
+>>>>>>>>>>>>>>
+ADEVICE  plughw:1,0
+CHANNEL 0
+MYCALL XXXXXX-5
+MODEM 1200
+PTT /dev/ttyUSB1 RTS
+AGWPORT 8000
+KISSPORT 8001
+<<<<<<<<<<<<<<
+
+sudo apt-get install ax25-node telnet
+sudo apt-get install ax25-apps ax25-tools libax25 libax25-dev -y
+
+nano /etc/ax25/axports
+>>>>>>>>>>>>>>
+vhf     XXXXXX-5 1200    255     2       VHF L
+<<<<<<<<<<<<<<
+
+dann auf einer shell:
+direwolf -p -t 0 -T "%F %T.%N" -c direwolf.conf
+
+andere shell aufmachen (oder screen verwenden (sudo apt-get install screen))
+anmeldeversuch mit "axcall vhf SERVER/RELAIS" (HOSTNAME VOM BETEREIBER)
+wenn drin, dann bbsing. wenn drin, dann klappts
+
+mit "getip" eigene ip addresse holen. im kopf behalten.
+
+dann hier weiter:
+
+nano startallfun.sh (direwolf muss vor scriptaufruf gestartet werden/sein)
+>>>>>>>>>>>>>>
+#/bin/bash
+MY_IP=44.149.xxx.xxx <<<<<<<<<< EURE IP VOM SERVER (GETIP)
+SRV_IP=44.149.xxx.xxx <<<<<<<<<< EURE SERVERIP (VOM HOSTER)
+Device=ax0
+SRV_CALL=DB0HFT <<<<<<<<< HOST/RELAISNAME
+
+sudo /usr/sbin/kissattach `ls -l /tmp/kisstnc | awk '{ print $11 }'` vhf ${MY_IP}
+kissparms -c 1 -p vhf
+
+arp -H ax25 -i $Device -s ${SRV_IP} $SRV_CALL
+
+###router per hand -- soltle besser gehen
+ip route add ${SRV_IP} dev $Device
+
+ip route add 44.130.0.0/16 via ${SRV_IP}
+ip route add 44.148.0.0/15 via ${SRV_IP}
+ip route add 44.224.0.0/15 via ${SRV_IP}
+ip route add 44.143.0.0/16 via ${SRV_IP}
+ip route add 44.143.153.0 via ${SRV_IP}
+ip route add 44.143.168.96 via ${SRV_IP}
+# dns
+ip route add 44.55.64.20 via ${SRV_IP}
+ip route add 44.149.167.37 via ${SRV_IP}
+ip route add 44.149.59.201 via ${SRV_IP}
+ip route add 44.149.166.27 via ${SRV_IP}
+ip route add 44.149.166.164 via ${SRV_IP}
+ip route add 44.149.166.196 via ${SRV_IP}
+ip route add 44.149.166.70 via ${SRV_IP}
+ip route add 44.149.57.136 via ${SRV_IP}
+ip route add 44.225.64.12 via ${SRV_IP}
+ip route add 44.143.100.1 via ${SRV_IP}
+<<<<<<<<<<<<<<
+
+GOOD LUCK!
